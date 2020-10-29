@@ -27,6 +27,10 @@ def add_component(mesher, shape, largest_dimension, color, loc):
     for ixs in tess[1]:
         mesher.addTriangle(*ixs)
 
+    # Add CadQuery-reported vertices
+    for vert in shape.Vertices():
+        mesher.addCQVertex(vert.X, vert.Y, vert.Z)
+
     # Make sure that the largest dimension is represented accurately for camera positioning
     mesher.addLargestDim(largest_dimension)
 
@@ -57,15 +61,7 @@ def convert(build_result, output_file=None, error_file=None):
     """
     # We need to do a broad try/catch to let the user know if something higher-level fails
     try:
-        # Read the script text from the path at sys.argv[1]
-        # with open(sys.argv[1], 'r') as file:
-        #     script_text = file.read()
-
         mesher = JsonMesh()
-
-        # Parse and build using the text
-        # cqModel = cqgi.parse(script_text)
-        # build_result = cqModel.build({})
 
         if build_result.success:
             # Display all the results that the caller

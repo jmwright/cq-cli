@@ -26,9 +26,9 @@ component_template = (
 "normals": [],
 "uvs": [],
 "color": %(color)s,
-"cq_vertices": [],
-"cq_edges": [],
-"cq_faces": []
+"cqVertices": %(cqVertices)s,
+"cqEdges": [],
+"cqFaces": []
 }
 """)
 
@@ -71,6 +71,9 @@ class JsonMesh(object):
     nVertices = 0
     nTriangles = 0
     largestDim = -1
+    cqVertices = []
+    cqEdges = []
+    cqFaces = []
     color = [] # rgba
 
     def addVertex(self, x, y, z):
@@ -97,6 +100,12 @@ class JsonMesh(object):
         self.color = [r, g, b, a]
 
     """
+    Adds a CadQuery vertex representation
+    """
+    def addCQVertex(self, x, y, z):
+        self.cqVertices.append([x, y, z])
+
+    """
     Separates the current set of vertices, triangles, etc into a separate component.
     """
     def addComponent(self):
@@ -105,6 +114,7 @@ class JsonMesh(object):
             "triangles": str(self.triangles),
             "nVertices": self.nVertices,
             "nTriangles": self.nTriangles,
+            "cqVertices": str(self.cqVertices),
             "largestDim": self.largestDim,
             "color": self.color
         }
@@ -116,6 +126,7 @@ class JsonMesh(object):
         self.triangles = []
         self.nVertices = 0
         self.nTriangles = 0
+        self.cqVertices = []
         self.largestDim = -1
 
     """
