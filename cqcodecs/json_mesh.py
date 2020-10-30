@@ -27,8 +27,8 @@ component_template = (
 "uvs": [],
 "color": %(color)s,
 "cqVertices": %(cqVertices)s,
-"cqEdges": [],
-"cqFaces": []
+"cqEdges": %(cqEdges)s,
+"cqFaces": %(cqFaces)s
 }
 """)
 
@@ -115,6 +115,8 @@ class JsonMesh(object):
             "nVertices": self.nVertices,
             "nTriangles": self.nTriangles,
             "cqVertices": str(self.cqVertices),
+            "cqEdges": str(self.cqEdges),
+            "cqFaces": str(self.cqFaces),
             "largestDim": self.largestDim,
             "color": self.color
         }
@@ -127,6 +129,8 @@ class JsonMesh(object):
         self.nVertices = 0
         self.nTriangles = 0
         self.cqVertices = []
+        self.cqEdges = []
+        self.cqFaces = []
         self.largestDim = -1
 
     """
