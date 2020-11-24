@@ -7,6 +7,11 @@ def add_component(mesher, shape, largest_dimension, color, loc):
     """
     Adds a single component to the resultant JSON.
     """
+
+    # Protect against this being called with just a blank workplane object in the stack
+    if not hasattr(shape, "ShapeType"):
+        return
+
     tess = shape.tessellate(0.001)
     
     # Use the location, if there is one
