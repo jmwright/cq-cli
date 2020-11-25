@@ -1,3 +1,4 @@
+import sys
 import traceback
 import cadquery as cq
 from .json_mesh import JsonMesh
@@ -97,13 +98,18 @@ def convert(build_result, output_file=None, error_file=None):
                     # Add the single CQ shape to the JSON
                     add_component(mesher, result.shape.val(), result.shape.largestDimension(), None, None)
 
-            # Write the mesh to the file
-            with open(output_file, 'w') as file:
-                file.write(mesher.toJson())
+            # If an output file was specified write to it, otherwise print the JSON to stdout
+            if output_file != None:
+                # Write the mesh to the file
+                with open(output_file, 'w') as file:
+                    file.write(mesher.toJson())
 
-            # Let the process know we are done writing to the file
-            with open(output_file, 'a') as file:
-                file.write("semb_process_finished")
+                # Let the process know we are done writing to the file
+                with open(output_file, 'a') as file:
+                    file.write("semb_process_finished")
+            else:
+                print(mesher.toJson())
+                print("semb_process_finished")
         else :
             # Re-throw the exception so that it will be caught and formatted correctly
             raise(build_result.exception)
@@ -111,13 +117,17 @@ def convert(build_result, output_file=None, error_file=None):
     except Exception:
         out_tb = traceback.format_exc()
 
-        # We need to let the user know there was a build exception
-        with open(error_file, 'w') as file:
-            file.write("Component Generation Error: %s" % str(out_tb))
+        # If there is an error file specified write to that, otherwise write to stderr
+        if error_file != None:
+            # We need to let the user know there was a build exception
+            with open(error_file, 'w') as file:
+                file.write("Component Generation Error: %s" % str(out_tb))
 
-        # Let the process know we are done writing to the file
-        with open(error_file, 'a') as file:
-            file.write("semb_process_finished")
+            # Let the process know we are done writing to the file
+            with open(error_file, 'a') as file:
+                file.write("semb_process_finished")
+        else:
+            print("Conversion codec error: " + str(out_tb), file=sys.stderr)
 
         return None
 
