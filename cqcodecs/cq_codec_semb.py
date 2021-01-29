@@ -61,7 +61,7 @@ def handle_shape(mesher, shape, color, loc):
         add_component(mesher, shape, cq.Workplane().add(shape).largestDimension(), color, loc)
 
 
-def convert(build_result, output_file=None, error_file=None):
+def convert(build_result, output_file=None, error_file=None, output_opts=None):
     """
     Called by the cq-cli plugin system when requested by the user.
     """
